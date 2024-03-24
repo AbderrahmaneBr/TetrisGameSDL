@@ -40,4 +40,6 @@ cmake --build .
 .\TetrisGame.exe
 ```
 
+<li>Move SDL2.dll (inside bin folder) to build</li>
+
 </ol>
