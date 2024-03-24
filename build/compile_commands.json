@@ -1,8 +1,0 @@
-[
-{
-  "directory": "C:/Users/pc/Desktop/Repos/TetrisWCMake/build",
-  "command": "C:/TDM-GCC-64/bin/g++.exe  @CMakeFiles/TetrisGame.dir/includes_CXX.rsp -g -o CMakeFiles/TetrisGame.dir/src/main.cpp.obj -c C:/Users/pc/Desktop/Repos/TetrisWCMake/src/main.cpp",
-  "file": "C:/Users/pc/Desktop/Repos/TetrisWCMake/src/main.cpp",
-  "output": "CMakeFiles/TetrisGame.dir/src/main.cpp.obj"
-}
-]
