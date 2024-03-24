@@ -35,7 +35,7 @@ git clone https://github.com/AbderrahmaneBr/TetrisGameSDL.git
 cd TetrisGameSDL
 md build
 cd build
-cmake ..
+cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -G "Unix Makefiles"
 cmake --build .
 .\TetrisGame.exe
 ```
