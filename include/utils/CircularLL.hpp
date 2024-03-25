@@ -1,23 +1,21 @@
 #ifndef CIRCULARLL_HPP
 #define CIRCULARLL_HPP
-#include "utils/Colors.hpp"
 
 template <typename T>
 class Node {
 public:
     T data;
     Node<T>* next;
+    Node<T>* prev;
 
-    Node(T value) : data(value), next(nullptr) {}
+    Node(T value) : data(value), next(nullptr), prev(nullptr) {}
 
 };
 
 template <typename T>
 class CircularLinkedList {
-private:
-    Node<T>* head;
-
 public:
+    Node<T>* head;
     CircularLinkedList() : head(nullptr) {}
 
     ~CircularLinkedList() {
@@ -34,15 +32,15 @@ public:
         Node<T>* newNode = new Node<T>(value);
         if (head == nullptr) {
             head = newNode;
-            newNode->next = head;
+            head->next = head;
+            head->prev = head;
         } else {
-            Node<T>* temp = head;
-            while (temp->next != head) {
-                temp = temp->next;
-            }
+            Node<T>* last = head->prev;
+            last->next = newNode;
+            newNode->prev = last;
             newNode->next = head;
-            temp->next = newNode;
-            head = newNode;
+            head->prev = newNode;
+            head = newNode; // Update the head to the new node (in order to start displaying from it)
         }
     }
 
@@ -50,18 +48,54 @@ public:
         Node<T>* newNode = new Node<T>(value);
         if (head == nullptr) {
             head = newNode;
-            newNode->next = head;
+            head->next = head;
+            head->prev = head;
         } else {
-            Node<T>* temp = head;
-            while (temp->next != head) {
-                temp = temp->next;
-            }
-            temp->next = newNode;
+            Node<T>* last = head->prev;
+            last->next = newNode;
+            newNode->prev = last;
             newNode->next = head;
+            head->prev = newNode;
         }
     }
 
-    
+    void removeLeft() {
+        if (head == nullptr) {
+            std::cout << "List is empty." << std::endl;
+            return;
+        }
+
+        Node<T>* last = head->prev;
+        Node<T>* newHead = head->next;
+        if (head == last) {
+            delete head;
+            head = nullptr;
+        } else {
+            last->next = newHead;
+            newHead->prev = last;
+            delete head;
+            head = newHead;
+        }
+    }
+
+    void removeRight() {
+        if (head == nullptr) {
+            std::cout << "List is empty." << std::endl;
+            return;
+        }
+
+        Node<T>* last = head->prev;
+        Node<T>* newLast = last->prev;
+        if (head == last) {
+            delete head;
+            head = nullptr;
+        } else {
+            newLast->next = head;
+            head->prev = newLast;
+            delete last;
+        }
+    }
+
     void display() {
         if (head == nullptr) {
             std::cout << "List is empty." << std::endl;
@@ -72,27 +106,8 @@ public:
 
         Node<T>* temp = head;
         do {
-            std::cout << temp->data << " ";
-            temp = temp->next;
-        } while (temp != head);
-        std::cout << std::endl;
-    
-        return;
-
-    }
-
-    void displayShapeObject() {
-        if (head == nullptr) {
-            std::cout << "List is empty." << std::endl;
-            return;
-        }
-
-        typeid(T);
-
-        Node<T>* temp = head;
-        do {
             int objectColor = (temp->data).getColor();
-            int objectShape = (temp->data).getColor();
+            int objectShape = (temp->data).getShape();
 
             std::string buffer;
             switch (objectColor)
@@ -117,16 +132,16 @@ public:
             switch (objectShape)
             {
             case 0: // Rectangle
-                buffer.append("\u25A0"); // ■
+                buffer.append("■"); // ■
                 break;
             case 1: // Circle
-                buffer.append("\u25CF"); // ●
+                buffer.append("●"); // ●
                 break;
             case 2: // Triangle
-                buffer.append("\u25B2"); // ▲
+                buffer.append("▲"); // ▲
                 break;
             case 3: // Diamond
-                buffer.append("\u25C6"); // ◆
+                buffer.append("◆"); // ◆
                 break;
             
             default:
