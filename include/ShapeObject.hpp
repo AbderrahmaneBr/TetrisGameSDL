@@ -12,6 +12,7 @@ public:
     void setShape(SHAPE);
     SHAPE getShape();
     COLOR getColor();
+    static Object* random();
 };
 
 #endif

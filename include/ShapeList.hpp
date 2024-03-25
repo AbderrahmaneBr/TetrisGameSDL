@@ -2,8 +2,6 @@
 #define SHAPELIST_HPP
 #include "utils/CircularLL.hpp"
 #include "ShapeObject.hpp"
-#include "math.h"
-#include <random>
 
 template <typename T>
 class ShapeList
@@ -12,47 +10,13 @@ public:
     CircularLinkedList<Object> list;
 
     ShapeList() {
-        std::random_device dev;
-        std::mt19937 rng(dev());
-        std::uniform_int_distribution<std::mt19937::result_type> dist_shape(0, 3);
-        std::uniform_int_distribution<std::mt19937::result_type> dist_color(0, 3);
-
-        for (int i = 0; i < 6; i++) {
-            COLOR color;
-            SHAPE shape;
-
-            switch (dist_color(rng)) {
-            case 0:
-                color = RED;
-                break;
-            case 1:
-                color = GREEN;
-                break;
-            case 2:
-                color = BLUE;
-                break;
-            case 3:
-                color = YELLOW;
-                break;
-            }
-
-            switch (dist_shape(rng)) {
-            case 0:
-                shape = RECTANGLE;
-                break;
-            case 1:
-                shape = CIRCLE;
-                break;
-            case 2:
-                shape = TRIANGLE;
-                break;
-            case 3:
-                shape = DIAMOND;
-                break;
-            }
-
-            list.addRight(Object(shape, color));
-        }
+        // Creating 6 Objects and Adding them to list
+        list.addRight(Object::random());
+        list.addRight(Object::random());
+        list.addRight(Object::random());
+        list.addRight(Object::random());
+        list.addRight(Object::random());
+        list.addRight(Object::random());
 
     }
 
@@ -60,36 +24,94 @@ public:
         Node<Object>* temp = list.head;
         CircularLinkedList<Object>* result = new CircularLinkedList<Object>();
 
+        int ctr=0;
+
         do {
-            if ((temp->data).getColor() == color) {
+            if ((temp->data)->getColor() == color) {
                 result->addRight(temp->data);
+                ctr++;
             }
             temp = temp->next;
         } while (temp != list.head);
 
+        if(!ctr) return nullptr;
         return result;
     }
 
-    CircularLinkedList<Object> exportShape(SHAPE shape) {
+    CircularLinkedList<Object>* exportShape(SHAPE shape) {
         Node<Object>* temp = list.head;
-        CircularLinkedList<Object> result;
+        CircularLinkedList<Object>* result = new CircularLinkedList<Object>();
+        int ctr=0;
 
         do {
-            if ((temp->data).getShape() == shape) {
-                result.addRight(temp->data);
+            if ((temp->data)->getShape() == shape) {
+                result->addRight(temp->data);
+                ctr++;
             }
             temp = temp->next;
         } while (temp != list.head);
 
+        if(!ctr) return nullptr;
         return result;
+    }
+
+    void addLeft(Object* obj){
+        list.addLeft(obj);
+    };
+
+    void addRight(Object* obj){
+        list.addRight(obj);
+    };
+
+    void removeLeft(){
+        list.removeLeft();
+    }
+
+    void removeRight(){
+        list.removeRight();
+    }
+
+    void display(){
+        list.display();
     }
 
     void shiftColor(COLOR targetColor) {
-        CircularLinkedList<Object> *ShapeListRed = exportColor(RED);
-        Node<Object>* temp = ShapeListRed->head;
-        (temp->data).setShape(RECTANGLE);
-        
+        CircularLinkedList<Object> *ShapeList = exportColor(targetColor);
+
+        if(ShapeList == nullptr) {
+            return;
+        }
+
+        Node<Object>* temp = ShapeList->head;
+        SHAPE prevShape = temp->prev->data->getShape();
+        SHAPE currShape;
+        do {
+            currShape = temp->data->getShape();
+            temp->data->setShape(prevShape);
+            prevShape = currShape;
+            temp = temp->next;
+        } while(temp != ShapeList->head);
     }
+
+    void shiftShape(SHAPE targetShape) {
+        CircularLinkedList<Object> *ShapeList = exportShape(targetShape);
+
+        if(ShapeList == nullptr) {
+            return;
+        }
+
+        Node<Object>* temp = ShapeList->head;
+        COLOR prevShape = temp->prev->data->getColor();
+        COLOR currShape;
+        do {
+            currShape = temp->data->getColor();
+            temp->data->setColor(prevShape);
+            prevShape = currShape;
+            temp = temp->next;
+        } while(temp != ShapeList->head);
+    }
+
+
 
 
 

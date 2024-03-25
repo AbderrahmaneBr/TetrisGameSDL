@@ -4,11 +4,11 @@
 template <typename T>
 class Node {
 public:
-    T data;
+    T* data;
     Node<T>* next;
     Node<T>* prev;
 
-    Node(T value) : data(value), next(nullptr), prev(nullptr) {}
+    Node(T* value) : data(value), next(nullptr), prev(nullptr) {}
 
 };
 
@@ -28,7 +28,7 @@ public:
         }
     }
     
-    void addLeft(T value) {
+    void addLeft(T* value) {
         Node<T>* newNode = new Node<T>(value);
         if (head == nullptr) {
             head = newNode;
@@ -44,7 +44,7 @@ public:
         }
     }
 
-    void addRight(T value) {
+    void addRight(T* value) {
         Node<T>* newNode = new Node<T>(value);
         if (head == nullptr) {
             head = newNode;
@@ -58,6 +58,7 @@ public:
             head->prev = newNode;
         }
     }
+
 
     void removeLeft() {
         if (head == nullptr) {
@@ -106,8 +107,8 @@ public:
 
         Node<T>* temp = head;
         do {
-            int objectColor = (temp->data).getColor();
-            int objectShape = (temp->data).getShape();
+            int objectColor = (temp->data)->getColor();
+            int objectShape = (temp->data)->getShape();
 
             std::string buffer;
             switch (objectColor)

@@ -3,27 +3,74 @@
 #include "utils/CircularLL.hpp"
 #include "ShapeObject.hpp"
 #include "ShapeList.hpp"
+#include <conio.h>
 
 
 main(int argc, char* argv[]) {
 
     ShapeList<Object> shapeList;
-    shapeList.list.display();
-    std::cout << std::endl;
-    shapeList.shiftColor(RED);
-    shapeList.list.display();
+    system("cls");
+    shapeList.display();
 
-    // // Color Lists
-    // CircularLinkedList<Object> ShapeObjectsListRED = shapeList.exportColor(RED);
-    // CircularLinkedList<Object> ShapeObjectsListGREEN = shapeList.exportColor(GREEN);
-    // CircularLinkedList<Object> ShapeObjectsListYELLOW = shapeList.exportColor(YELLOW);;
-    // CircularLinkedList<Object> ShapeObjectsListBLUE = shapeList.exportColor(BLUE);
+    while (true) {
+        if (_kbhit()) {
+            char ch = _getch();
+            if (ch == 'x') {
+                break;
+            } else {
+                ch = _getch();
 
-    // // Shape Lists
-    // CircularLinkedList<Object> ShapeObjectsListRECTANGLE = shapeList.exportShape(RECTANGLE);
-    // CircularLinkedList<Object> ShapeObjectsListTRIANGLE = shapeList.exportShape(TRIANGLE);
-    // CircularLinkedList<Object> ShapeObjectsListCIRCLE = shapeList.exportShape(CIRCLE);
-    // CircularLinkedList<Object> ShapeObjectsListDIAMOND = shapeList.exportShape(DIAMOND);
+                switch (ch) {
+
+                    case 75: // Left arrow key
+                        shapeList.addRight(Object::random());
+                        shapeList.removeLeft();
+
+                        break;
+
+                    case 77: // Right arrow key
+                        shapeList.addLeft(Object::random());
+                        shapeList.removeRight();
+
+                        break;
+
+
+                    case 'q':
+                        shapeList.shiftColor(RED);
+                        break;
+                    case 'w':
+                        shapeList.shiftColor(GREEN);
+                        break;
+                    case 'e':
+                        shapeList.shiftColor(BLUE);
+                        break;
+                    case 'r':
+                        shapeList.shiftColor(YELLOW);
+                        break;
+                    case 'a':
+                        shapeList.shiftShape(RECTANGLE);
+                        break;
+                    case 's':
+                        shapeList.shiftShape(CIRCLE);
+                        break;
+                    case 'd':
+                        shapeList.shiftShape(TRIANGLE);
+                        break;
+                    case 'f':
+                        shapeList.shiftShape(DIAMOND);
+                        break;
+
+
+                    default:
+                        continue;
+                    
+                    }
+
+                    system("cls");
+                    shapeList.display();
+            }
+        }
+    }
 
 
     return 0;
