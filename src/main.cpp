@@ -9,10 +9,12 @@
 main(int argc, char* argv[]) {
 
     ShapeList<Object> shapeList;
-    system("cls");
-    shapeList.display();
 
     while (true) {
+        system("cls");
+        shapeList.checkIdenticalShapes(); // check if random generated objects are by chance identical by color or by shape
+        shapeList.display();
+
         if (_kbhit()) {
             char ch = _getch();
             if (ch == 'x') {
@@ -66,8 +68,7 @@ main(int argc, char* argv[]) {
                     
                     }
 
-                    system("cls");
-                    shapeList.display();
+
             }
         }
     }
