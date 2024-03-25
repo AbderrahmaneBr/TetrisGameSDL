@@ -1,40 +1,41 @@
-#ifndef CIRCULARLL_HPP
-#define CIRCULARLL_HPP
+#ifndef CIRCULARDLL_HPP
+#define CIRCULARDLL_HPP
 
 template <typename T>
-class Node {
+class NodeDouble {
 public:
-    T* data;
-    Node<T>* next;
-    Node<T>* prev;
+    T data;
+    NodeDouble<T>* next;
+    NodeDouble<T>* prev;
 
-    Node(T* value) : data(value), next(nullptr), prev(nullptr) {}
+    NodeDouble(T value) : data(value), next(nullptr), prev(nullptr) {}
 };
 
 template <typename T>
-class CircularLinkedList {
+class CircularDoublyLinkedList {
 public:
-    Node<T>* head;
-    CircularLinkedList() : head(nullptr) {}
+    NodeDouble<T>* head;
+    CircularDoublyLinkedList() : head(nullptr) {}
 
-    ~CircularLinkedList() {
-        Node<T>* current = head;
-        while (current != nullptr) {
-            Node<T>* next = current->next;
+    ~CircularDoublyLinkedList() {
+        if (head == nullptr) return;
+
+        NodeDouble<T>* current = head;
+        do {
+            NodeDouble<T>* next = current->next;
             delete current;
             current = next;
-            if (current == head) break;
-        }
+        } while (current != head);
     }
     
-    void addLeft(T* value) {
-        Node<T>* newNode = new Node<T>(value);
+    void addLeft(T value) {
+        NodeDouble<T>* newNode = new NodeDouble<T>(value);
         if (head == nullptr) {
             head = newNode;
             head->next = head;
             head->prev = head;
         } else {
-            Node<T>* last = head->prev;
+            NodeDouble<T>* last = head->prev;
             last->next = newNode;
             newNode->prev = last;
             newNode->next = head;
@@ -43,61 +44,34 @@ public:
         }
     }
 
-    void addRight(T* value) {
-        Node<T>* newNode = new Node<T>(value);
+    void addRight(T value) {
+        NodeDouble<T>* newNode = new NodeDouble<T>(value);
         if (head == nullptr) {
             head = newNode;
             head->next = head;
             head->prev = head;
         } else {
-            Node<T>* last = head->prev;
+            NodeDouble<T>* last = head->prev;
             last->next = newNode;
             newNode->prev = last;
             newNode->next = head;
             head->prev = newNode;
-
         }
     }
 
-
-    void removeLeft() {
+    void shift() {
         if (head == nullptr) {
             std::cout << "List is empty." << std::endl;
             return;
         }
 
-        Node<T>* last = head->prev;
-        Node<T>* newHead = head->next;
-        if (head == last) {
-            delete head;
-            head = nullptr;
-        } else {
-            last->next = newHead;
-            newHead->prev = last;
-            delete head;
-            head = newHead;
-        }
+        NodeDouble<T>* temp = head;
+        do {
+            (temp->data).setColor((temp->next->data).getColor());
+            temp = temp->next;
+        } while (temp != head);
     }
 
-    void removeRight() {
-        if (head == nullptr) {
-            std::cout << "List is empty." << std::endl;
-            return;
-        }
-
-        Node<T>* last = head->prev;
-        Node<T>* newLast = last->prev;
-        if (head == last) {
-            delete head;
-            head = nullptr;
-        } else {
-            newLast->next = head;
-            head->prev = newLast;
-            delete last;
-
-
-        }
-    }
 
     void display() {
         if (head == nullptr) {
@@ -107,10 +81,10 @@ public:
 
         typeid(T);
 
-        Node<T>* temp = head;
+        NodeDouble<T>* temp = head;
         do {
-            int objectColor = (temp->data)->getColor();
-            int objectShape = (temp->data)->getShape();
+            int objectColor = (temp->data).getColor();
+            int objectShape = (temp->data).getShape();
 
             std::string buffer;
             switch (objectColor)
@@ -156,6 +130,8 @@ public:
             std::cout << buffer << " ";
             temp = temp->next;
         } while (temp != head);
+
+        std::cout << std::endl;
     
         return;
 
